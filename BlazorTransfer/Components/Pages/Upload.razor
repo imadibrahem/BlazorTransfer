@@ -3,3 +3,18 @@
 <PageTitle>Upload Files</PageTitle>
 
 <h1>Upload Files</h1>
+
+<input type="file" multiple @onchange="OnChange" />
+
+@if (progress > 0)
+{
+     <p>Progress: @progress%</p>
+}
+
+@code {
+    private int progress = 0;
+    private async Task OnChange(ChangeEventArgs e)
+    {
+        var files = (Microsoft.AspNetCore.Components.Forms.IBrowserFile[])e.Value;
+    }
+}
