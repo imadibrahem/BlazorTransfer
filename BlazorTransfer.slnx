@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="BlazorTransfer/BlazorTransfer.csproj" />
+  <Project Path="BlazorTransfer.Api/BlazorTransfer.Api.csproj" />
+  <Project Path="BlazorTransfer.Client/BlazorTransfer.csproj" />
+  <Project Path="BlazorTransfer.Shared/BlazorTransfer.Shared.csproj" />
 </Solution>

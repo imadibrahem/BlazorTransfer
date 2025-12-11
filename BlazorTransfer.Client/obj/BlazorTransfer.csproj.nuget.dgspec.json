@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Api\\BlazorTransfer.Api.csproj": {}
+    "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Client\\BlazorTransfer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Api\\BlazorTransfer.Api.csproj": {
+    "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Client\\BlazorTransfer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Api\\BlazorTransfer.Api.csproj",
-        "projectName": "BlazorTransfer.Api",
-        "projectPath": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Api\\BlazorTransfer.Api.csproj",
+        "projectUniqueName": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Client\\BlazorTransfer.csproj",
+        "projectName": "BlazorTransfer",
+        "projectPath": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Client\\BlazorTransfer.csproj",
         "packagesPath": "C:\\Users\\imadi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Api\\obj\\",
+        "outputPath": "C:\\Users\\imadi\\Desktop\\projects\\BlazorTransfer\\BlazorTransfer.Client\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\imadi\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -48,9 +48,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
+            "Microsoft.AspNetCore.App.Internal.Assets": {
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.0, )"
+              "version": "[10.0.0, )",
+              "autoReferenced": true
             }
           },
           "imports": [

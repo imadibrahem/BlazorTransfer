@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "BlazorTransfer.Shared/1.0.0": {
+        "runtime": {
+          "BlazorTransfer.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BlazorTransfer.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
