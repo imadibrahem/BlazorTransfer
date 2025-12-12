@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<FileStorageService>();
+builder.Services.AddHostedService<FileCleanupWorker>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddCors(options =>
 {
