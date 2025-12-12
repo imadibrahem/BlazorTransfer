@@ -22,7 +22,16 @@ else if (errorMessage != null)
 @if (result != null)
 {
     <h3>Download link</h3>
-    <a href="@result.DownloadUrl" target="_blank">@result.DownloadUrl</a>
+    //<a href="@result.DownloadUrl" target="_blank">@result.DownloadUrl</a>
+    <div class="input-group mt-2">
+        <input class="form-control"
+            value="@result.DownloadUrl"
+            readonly />
+        <button class="btn btn-primary" @onclick="CopyLink">
+            Copy
+        </button>
+</div>
+
 }
 
 @code {
@@ -42,5 +51,18 @@ else if (errorMessage != null)
             Console.WriteLine("ERROR: " + ex.ToString());
             errorMessage = ex.Message;
         }
+    }
+
+        async Task CopyLink()
+    {
+        await ClipboardCopy(result!.DownloadUrl);
+    }
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
+
+    public async Task ClipboardCopy(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
     }
 }
