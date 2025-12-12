@@ -1,30 +1,32 @@
+using BlazorTransfer.Client.Services;
 using BlazorTransfer.Components;
-using static BlazorTransfer.Client.Services.TransferService;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<BlazorTransfer.Client.Services.TransferService>();
-builder.Services.AddHttpClient(); 
-
-
-// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddScoped<TransferService>();
+builder.Services.AddHttpClient<TransferService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:6500/");
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+
 app.UseHttpsRedirection();
+
+// Required for Blazor Server
+app.UseRouting();
 
 app.UseAntiforgery();
 
-app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

@@ -18,31 +18,33 @@ namespace BlazorTransfer.Api.Services
 
         public async Task<FileUploadResult> SaveAsync(IFormFileCollection files)
         {
-             string transferId = Guid.NewGuid().ToString("N");
+            string transferId = Guid.NewGuid().ToString("N");
 
-    string folder = Path.Combine("Uploads", transferId);
-    Directory.CreateDirectory(folder);
+            string folder = Path.Combine(_basePath, transferId);
+            Directory.CreateDirectory(folder);
 
-    List<FileMetadata> metadata = new();
+            List<FileMetadata> metadata = new();
 
-    foreach (var file in files)
-    {
-        string path = Path.Combine(folder, file.FileName);
-        using var stream = new FileStream(path, FileMode.Create);
-        await file.CopyToAsync(stream);
+            foreach (var file in files)
+            {
+                string path = Path.Combine(folder, file.FileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                await file.CopyToAsync(stream);
 
-        metadata.Add(new FileMetadata
-        {
-            FileName = file.FileName,
-            Size = file.Length
-        });
-    }
+                metadata.Add(new FileMetadata
+                {
+                    FileName = file.FileName,
+                    Size = file.Length,
+                    ContentType = file.ContentType
+            });
+            }
 
-    return new FileUploadResult
-    {
-        TransferId = transferId,
-        Files = metadata
-    };
+            return new FileUploadResult
+            {
+                TransferId = transferId,
+                Files = metadata
+            };
+
         }
 
         public (Stream Stream, string FileName, string ContentType)? GetFileStream(string id)

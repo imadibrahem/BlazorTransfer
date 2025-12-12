@@ -1,49 +1,36 @@
-
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using BlazorTransfer.Shared;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace BlazorTransfer.Client.Services
+namespace BlazorTransfer.Client.Services;
+
+public class TransferService
 {
-    public class TransferService
+    private readonly HttpClient _http;
+
+    public TransferService(HttpClient http)
     {
-        private readonly HttpClient _http;
+        _http = http;
+    }
 
-        public TransferService(HttpClient http)
+    public async Task<FileUploadResult?> UploadAsync(IReadOnlyList<IBrowserFile> files)
+    {
+        var content = new MultipartFormDataContent();
+
+        foreach (var file in files)
         {
-            _http = http;
+            var stream = file.OpenReadStream(long.MaxValue);
+            var streamContent = new StreamContent(stream);
+            streamContent.Headers.ContentType =
+                new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+
+            content.Add(streamContent, "files", file.Name);
         }
 
-         public async Task<FileUploadResult> UploadFilesAsync(IBrowserFile[] files)
-        {
-            using var content = new MultipartFormDataContent();
-           
-            foreach (var f in files)
-            {
-             var ms = new MemoryStream();
-             await f.OpenReadStream(f.Size).CopyToAsync(ms);
-             ms.Position = 0;
+        var response = await _http.PostAsync("api/transfer/upload", content);
 
-             var streamContent = new StreamContent(ms);
-             streamContent.Headers.ContentType =
-             new MediaTypeHeaderValue(f.ContentType);
+        if (!response.IsSuccessStatusCode)
+            return null;
 
-             content.Add(streamContent, "files", f.Name);
-           }
-              
-           var response = await _http.PostAsync("api/transfer/upload", content);
-           response.EnsureSuccessStatusCode();
-
-           return await response.Content.ReadFromJsonAsync<FileUploadResult>()
-           ?? throw new Exception("Invalid response");
-           
-        }
-
-        public async Task<Stream> DownloadAsync(string id)
-        {
-            return await _http.GetStreamAsync($"api/transfer/download/{id}");
-        }
+        return await response.Content.ReadFromJsonAsync<FileUploadResult>();
     }
 }
