@@ -23,6 +23,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Required for Blazor Server
+app.UseStaticFiles(); 
 app.UseRouting();
 
 app.UseAntiforgery();

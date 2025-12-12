@@ -31,7 +31,7 @@ else if (errorMessage != null)
 
     async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
-        Console.WriteLine("OnFilesSelected fired");   // IMPORTANT
+        Console.WriteLine("OnFilesSelected fired");   
         try
         {
             var files = e.GetMultipleFiles().ToArray();
@@ -39,6 +39,7 @@ else if (errorMessage != null)
         }
         catch (Exception ex)
         {
+            Console.WriteLine("ERROR: " + ex.ToString());
             errorMessage = ex.Message;
         }
     }
