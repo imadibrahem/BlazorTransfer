@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlazorTransfer.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f43725e926a24202ecbc9be2142df3169736b8ea")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96097f257fbe0ab0e93a7cc0a0a883e55c487488")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlazorTransfer.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlazorTransfer.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

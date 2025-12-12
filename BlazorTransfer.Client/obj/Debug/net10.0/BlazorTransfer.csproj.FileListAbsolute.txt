@@ -27,7 +27,6 @@ C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\n
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\scopedcss\Components\Layout\ReconnectModal.razor.rz.scp.css
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\scopedcss\bundle\BlazorTransfer.styles.css
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\scopedcss\projectbundle\BlazorTransfer.bundle.scp.css
-C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\uosiul0lxc-{0}-khy4lop6wu-khy4lop6wu.gz
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\ghjbxyjykn-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\dgrokpt250-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\idp9mmqhum-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -88,3 +87,4 @@ C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\n
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\BlazorTransfer.pdb
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\BlazorTransfer.genruntimeconfig.cache
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\ref\BlazorTransfer.dll
+C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\uosiul0lxc-{0}-cofs4dppfh-cofs4dppfh.gz
