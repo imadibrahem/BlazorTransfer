@@ -87,4 +87,4 @@ C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\n
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\BlazorTransfer.pdb
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\BlazorTransfer.genruntimeconfig.cache
 C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\ref\BlazorTransfer.dll
-C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\uosiul0lxc-{0}-cofs4dppfh-cofs4dppfh.gz
+C:\Users\imadi\Desktop\projects\BlazorTransfer\BlazorTransfer.Client\obj\Debug\net10.0\compressed\uosiul0lxc-{0}-jc0zkiq1ap-jc0zkiq1ap.gz

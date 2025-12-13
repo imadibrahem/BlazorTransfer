@@ -7,26 +7,32 @@
 @inject TransferService Transfer
 @inject IJSRuntime JS
 
-<h1 class="mb-4">Upload Files</h1>
+<div class="upload-box">
+    <h1 class="mb-4">Upload Files</h1>
 
 <div class="upload-container">
 
-    <!-- Drag & Drop Box -->
     <div class="drop-zone @(isDragging ? "dragging" : "")"
          @ondragover:preventDefault="true"
-         @ondragover="() => isDragging = true"
-         @ondragleave="() => isDragging = false"
-         @ondrop:preventDefault="true"
-         @ondrop="OnDrop">
+         @ondragenter="() => isDragging = true"
+         @ondragleave="() => isDragging = false">
 
-        <p class="text-muted">Drag & drop files here</p>
-        <p class="text-muted">or click to choose files</p>
+        <p class="text-muted mb-1">Drag & drop files here</p>
+        <p class="text-muted small">(Release to upload)</p>
 
-        <!-- Hidden actual file picker -->
-        <InputFile OnChange="OnFilesSelected" multiple class="file-input" />
+        <InputFile OnChange="OnFilesSelected"
+                   multiple
+                   class="file-input" />
+    </div>
+
+    <div class="mt-3">
+        <InputFile OnChange="OnFilesSelected"
+                   multiple
+                   class="form-control" />
     </div>
 
 </div>
+
 
 @if (result == null && errorMessage == null)
 {
@@ -51,6 +57,7 @@ else if (errorMessage != null)
 </div>
 
 }
+</div>
 
 @code {
     FileUploadResult? result;
@@ -71,29 +78,12 @@ else if (errorMessage != null)
             errorMessage = ex.Message;
         }
     }
-    void OnDragOver(DragEventArgs e)
-    {
-        
-        isDragging = true;
-    }
-        void OnDragLeave(DragEventArgs e)
-    {
-        isDragging = false;
-    }
-        async Task OnDrop(DragEventArgs e)
-    {
-       
-await JS.InvokeVoidAsync("document.querySelector('.file-input').click()");
-        isDragging = false;
-    }
 
         async Task CopyLink()
     {
         await ClipboardCopy(result!.DownloadUrl);
     }
 
-    //[Inject]
-    //public IJSRuntime JS { get; set; } = default!;
 
     public async Task ClipboardCopy(string text)
     {
