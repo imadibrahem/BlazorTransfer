@@ -64,12 +64,23 @@ else if (errorMessage != null)
     string? errorMessage;
     bool isDragging = false;
 
+    const long MaxFileSize = 2L * 1024 * 1024 * 1024; 
+
     async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
         Console.WriteLine("OnFilesSelected fired");   
         try
         {
             var files = e.GetMultipleFiles().ToArray();
+            
+            foreach (var file in files)
+            {
+                if (file.Size > MaxFileSize)
+                {
+                    errorMessage = $"File '{file.Name}' exceeds the 2 GB limit.";
+                    return;
+                }
+            }
             result = await Transfer.UploadAsync(files);
         }
         catch (Exception ex)

@@ -6,6 +6,8 @@ namespace BlazorTransfer.Client.Services;
 public class TransferService
 {
     private readonly HttpClient _http;
+    private const long MaxFileSize = 2L * 1024 * 1024 * 1024;
+
 
     public TransferService(HttpClient http)
     {
@@ -18,13 +20,25 @@ public class TransferService
 
         foreach (var file in files)
         {
-            var stream = file.OpenReadStream(long.MaxValue);
+            //if (file.Size > MaxFileSize)
+                //throw new InvalidOperationException(
+                    //$"File '{file.Name}' exceeds the 2 GB limit.");
+            using var stream = file.OpenReadStream(MaxFileSize);
             var streamContent = new StreamContent(stream);
             streamContent.Headers.ContentType =
                 new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
 
             content.Add(streamContent, "files", file.Name);
         }
+        try
+        {
+           await content.LoadIntoBufferAsync(MaxFileSize);
+        }
+        catch (Exception)
+        {
+            throw new InvalidOperationException("One or more files exceed the 2 GB limit.");
+        }
+
 
         var response = await _http.PostAsync("api/transfer/upload", content);
 

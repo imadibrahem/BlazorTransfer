@@ -19,6 +19,15 @@ namespace BlazorTransfer.Api.Controllers
         [HttpPost("upload")]
         public async Task<ActionResult<FileUploadResult>> Upload()
         {
+
+        foreach (var file in Request.Form.Files)
+        {
+            if (file.Length > 2L * 1024 * 1024 * 1024)
+            {
+               return BadRequest($"File '{file.FileName}' exceeds 2 GB limit.");
+            }
+}
+
         var files = Request.Form.Files;
         if (files == null || files.Count == 0)
             return BadRequest("No files");
