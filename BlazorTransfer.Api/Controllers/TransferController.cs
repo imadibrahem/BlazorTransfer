@@ -14,7 +14,7 @@ namespace BlazorTransfer.Api.Controllers
         public TransferController(FileStorageService storage)
         {
              _storage = storage;
-        }
+        } 
 
         [HttpPost("upload")]
         public async Task<ActionResult<FileUploadResult>> Upload()
