@@ -1,6 +1,18 @@
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
+    margin: 0;
 }
+
+body {
+    background-image: url("/images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
 
 a, .btn-link {
     color: #006bb7;
