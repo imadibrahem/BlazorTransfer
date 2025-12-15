@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using BlazorTransfer.Shared;
 
 namespace BlazorTransfer.Api.Services
@@ -73,5 +74,29 @@ namespace BlazorTransfer.Api.Services
                 }
             }
         }
+        
+        public (Stream Stream, string FileName, string ContentType)? GetZipStream(string id)
+        {
+            var dir = Path.Combine(_basePath, id);
+            if (!Directory.Exists(dir)) return null;
+
+            var zipStream = new MemoryStream();
+
+            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+            {
+                foreach (var filePath in Directory.GetFiles(dir))
+                {
+                    var entry = archive.CreateEntry(Path.GetFileName(filePath), CompressionLevel.Fastest);
+                    using var entryStream = entry.Open();
+                    using var fileStream = File.OpenRead(filePath);
+                    fileStream.CopyTo(entryStream);
+                }
+            }
+
+            zipStream.Position = 0;
+
+            return (zipStream, $"transfer-{id}.zip", "application/zip");
+        }
+
     }
 }

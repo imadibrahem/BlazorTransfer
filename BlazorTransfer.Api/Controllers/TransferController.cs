@@ -49,9 +49,9 @@ namespace BlazorTransfer.Api.Controllers
         [HttpGet("download/{id}")]
         public IActionResult Download(string id)
         {
-            var file = _storage.GetFileStream(id);
-            if (file == null) return NotFound();
-            return File(file.Value.Stream, file.Value.ContentType, file.Value.FileName);
+            var zip = _storage.GetZipStream(id);
+            if (zip == null) return NotFound();
+            return File(zip.Value.Stream, zip.Value.ContentType, zip.Value.FileName);
         }
     }
 }

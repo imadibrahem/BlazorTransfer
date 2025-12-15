@@ -14,14 +14,23 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<FormOptions>(options =>
 {
-    options.MultipartBodyLengthLimit = 2L * 1024 * 1024 * 1024; // 2 GB
+    options.MultipartBodyLengthLimit = long.MaxValue;
 });
+
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Limits.MaxRequestBodySize = 2L * 1024 * 1024 * 1024;
+    options.Limits.MaxRequestBodySize = null;
 });
 
+
+builder.Services.AddServerSideBlazor()
+    .AddHubOptions(options =>
+    {
+        options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+        options.HandshakeTimeout = TimeSpan.FromMinutes(5);
+        options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    });
 
 builder.Services.AddCors(options =>
 {
