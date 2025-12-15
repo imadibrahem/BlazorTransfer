@@ -26,7 +26,7 @@ namespace BlazorTransfer.Api.Controllers
             {
                return BadRequest($"File '{file.FileName}' exceeds 2 GB limit.");
             }
-}
+        }
 
         var files = Request.Form.Files;
         if (files == null || files.Count == 0)

@@ -20,30 +20,17 @@ public class TransferService
 
         foreach (var file in files)
         {
-            //if (file.Size > MaxFileSize)
-                //throw new InvalidOperationException(
-                    //$"File '{file.Name}' exceeds the 2 GB limit.");
-            using var stream = file.OpenReadStream(MaxFileSize);
+            var stream = file.OpenReadStream(MaxFileSize);
             var streamContent = new StreamContent(stream);
             streamContent.Headers.ContentType =
                 new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
 
             content.Add(streamContent, "files", file.Name);
         }
-        try
-        {
-           await content.LoadIntoBufferAsync(MaxFileSize);
-        }
-        catch (Exception)
-        {
-            throw new InvalidOperationException("One or more files exceed the 2 GB limit.");
-        }
-
-
+        
         var response = await _http.PostAsync("api/transfer/upload", content);
 
-        if (!response.IsSuccessStatusCode)
-            return null;
+        response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<FileUploadResult>();
     }

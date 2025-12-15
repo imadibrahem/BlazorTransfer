@@ -1,5 +1,6 @@
 @page "/"
 @rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Forms
 
 @using BlazorTransfer.Client.Services
 @using BlazorTransfer.Shared
@@ -20,15 +21,21 @@
         <p class="text-muted mb-1">Drag & drop files here</p>
         <p class="text-muted small">(Release to upload)</p>
 
-        <InputFile OnChange="OnFilesSelected"
-                   multiple
-                   class="file-input" />
-    </div>
-
-    <div class="mt-3">
-        <InputFile OnChange="OnFilesSelected"
-                   multiple
-                   class="form-control" />
+        <InputFile OnChange="OnFilesSelected" multiple class="file-input" />
+        <div class="mt-3">
+            <InputFile OnChange="OnFilesSelected" multiple class="form-control" />
+        </div>
+        
+        @*
+        <label class="btn btn-outline-secondary mt-2">
+            Or click to choose files
+            <InputFile OnChange="OnFilesSelected"
+                       multiple
+                       class="d-none" />
+        </label>
+        *@
+    
+        
     </div>
 
 </div>
@@ -63,32 +70,37 @@ else if (errorMessage != null)
     FileUploadResult? result;
     string? errorMessage;
     bool isDragging = false;
-
     const long MaxFileSize = 2L * 1024 * 1024 * 1024; 
 
     async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
-        Console.WriteLine("OnFilesSelected fired");   
+        Console.WriteLine("OnFilesSelected fired");
+
+        errorMessage = null;
+        result = null;
+
+        var files = e.GetMultipleFiles();
+
+        foreach (var file in files)
+        {
+            if (file.Size > MaxFileSize)
+            {
+                errorMessage = $"File '{file.Name}' exceeds the 2 GB limit.";
+                return;
+            }
+        }   
+
         try
         {
-            var files = e.GetMultipleFiles().ToArray();
-            
-            foreach (var file in files)
-            {
-                if (file.Size > MaxFileSize)
-                {
-                    errorMessage = $"File '{file.Name}' exceeds the 2 GB limit.";
-                    return;
-                }
-            }
             result = await Transfer.UploadAsync(files);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("ERROR: " + ex.ToString());
-            errorMessage = ex.Message;
+            Console.WriteLine("ERROR: " + ex);
+            errorMessage = "Upload failed.";
         }
     }
+
 
         async Task CopyLink()
     {

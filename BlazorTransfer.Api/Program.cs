@@ -11,6 +11,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<FileStorageService>();
 builder.Services.AddHostedService<FileCleanupWorker>();
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 2L * 1024 * 1024 * 1024; // 2 GB
@@ -20,6 +21,7 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.MaxRequestBodySize = 2L * 1024 * 1024 * 1024;
 });
+
 
 builder.Services.AddCors(options =>
 {
