@@ -14,24 +14,31 @@ public class TransferService
         _http = http;
     }
 
-    public async Task<FileUploadResult?> UploadAsync(IReadOnlyList<IBrowserFile> files)
+    public async Task<FileUploadResult?> UploadAsync(
+        IReadOnlyList<IBrowserFile> files,
+        Action<string, long, long> onProgress)
     {
         var content = new MultipartFormDataContent();
 
         foreach (var file in files)
         {
             var stream = file.OpenReadStream(MaxFileSize);
-            var streamContent = new StreamContent(stream);
-            streamContent.Headers.ContentType =
+
+            var progressContent = new ProgressableStreamContent(
+                stream,
+                uploaded => onProgress(file.Name, uploaded, file.Size)
+            );
+
+            progressContent.Headers.ContentType =
                 new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
 
-            content.Add(streamContent, "files", file.Name);
+            content.Add(progressContent, "files", file.Name);
         }
-        
-        var response = await _http.PostAsync("api/transfer/upload", content);
 
+        var response = await _http.PostAsync("api/transfer/upload", content);
         response.EnsureSuccessStatusCode();
 
         return await response.Content.ReadFromJsonAsync<FileUploadResult>();
     }
+
 }

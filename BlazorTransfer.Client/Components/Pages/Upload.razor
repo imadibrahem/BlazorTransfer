@@ -25,20 +25,30 @@
         <div class="mt-3">
             <InputFile OnChange="OnFilesSelected" multiple class="form-control" />
         </div>
-        
-        @*
-        <label class="btn btn-outline-secondary mt-2">
-            Or click to choose files
-            <InputFile OnChange="OnFilesSelected"
-                       multiple
-                       class="d-none" />
-        </label>
-        *@
-    
-        
+      
     </div>
 
 </div>
+
+@if (progressItems.Any())
+{
+    <div class="mt-4">
+        @foreach (var item in progressItems)
+        {
+            <div class="mb-3">
+                <strong>@item.FileName</strong>
+                <div class="progress">
+                    <div class="progress-bar"
+                         role="progressbar"
+                         style="width: @item.Percentage%">
+                        @item.Percentage%
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
 
 
 @if (result == null && errorMessage == null)
@@ -72,12 +82,16 @@ else if (errorMessage != null)
     bool isDragging = false;
     const long MaxFileSize = 2L * 1024 * 1024 * 1024; 
 
+    List<UploadProgressItem> progressItems = new();
+
+
     async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
         Console.WriteLine("OnFilesSelected fired");
 
         errorMessage = null;
         result = null;
+        progressItems.Clear();
 
         var files = e.GetMultipleFiles();
 
@@ -88,11 +102,24 @@ else if (errorMessage != null)
                 errorMessage = $"File '{file.Name}' exceeds the 2 GB limit.";
                 return;
             }
+            progressItems.Add(new UploadProgressItem
+            {
+                FileName = file.Name,
+                TotalBytes = file.Size
+            });
         }   
 
         try
         {
-            result = await Transfer.UploadAsync(files);
+            result = await Transfer.UploadAsync(
+                files,
+                (fileName, uploaded, total) =>
+                {
+                    var item = progressItems.First(x => x.FileName == fileName);
+                    item.UploadedBytes = uploaded;
+                    InvokeAsync(StateHasChanged);
+
+                });
         }
         catch (Exception ex)
         {
