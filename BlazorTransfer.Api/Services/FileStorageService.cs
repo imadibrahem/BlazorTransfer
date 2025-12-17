@@ -8,6 +8,7 @@ namespace BlazorTransfer.Api.Services
         private readonly string _basePath;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<FileStorageService> _logger;
+        private const long MaxTotalUploadSize = 5L * 1024 * 1024 * 1024; // 5 GB
 
         public FileStorageService(IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ILogger<FileStorageService> logger)
         {
@@ -25,6 +26,17 @@ namespace BlazorTransfer.Api.Services
 
             var folder = Path.Combine(_basePath, transferId);
             Directory.CreateDirectory(folder);
+
+            var existingSize = Directory.EnumerateFiles(folder)
+                .Select(f => new FileInfo(f).Length)
+                .Sum();
+
+
+            long incomingSize = files.Sum(f => f.Length);
+            if (existingSize + incomingSize > MaxTotalUploadSize)
+            {
+                throw new InvalidOperationException("Total upload size exceeds the limit.");
+            }
 
             var metadata = new List<FileMetadata>();
 

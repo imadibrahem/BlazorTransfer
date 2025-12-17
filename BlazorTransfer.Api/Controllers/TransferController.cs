@@ -23,9 +23,20 @@ namespace BlazorTransfer.Api.Controllers
             var files = Request.Form.Files;
             if (files.Count == 0)
                 return BadRequest("No files");
+            
 
-            var result = await _storage.SaveAsync(files, transferId);
-
+             
+            var result = new FileUploadResult();
+            try
+            {
+               result = await _storage.SaveAsync(files, transferId);
+ 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error processing files: {ex.Message}");
+            }
+            
             var downloadUrl =
                 $"{Request.Scheme}://{Request.Host}/api/transfer/download/{result.TransferId}";
 

@@ -17,7 +17,8 @@
          @ondragover:preventDefault="true"
          @ondragenter="() => isDragging = true"
          @ondragleave="() => isDragging = false">
-
+         
+        <p class="text-muted small">Max file size allowed: @(MaxFileSize / (1024 * 1024)) MB</p>
         <p class="text-muted mb-1">Drag & drop files here</p>
         <p class="text-muted small">(Release to upload)</p>
 
@@ -54,6 +55,7 @@
 @if (result == null && errorMessage == null)
 {
     <p class="mt-3 text-secondary">Waiting for upload...</p>
+    <p class="text-muted small">Total size allowed: @(MaxTotalUploadSize / (1024 * 1024)) MB</p>
 }
 else if (errorMessage != null)
 {
@@ -71,7 +73,11 @@ else if (errorMessage != null)
         <button class="btn btn-primary" @onclick="CopyLink">
             Copy
         </button>
-</div>
+    </div>
+    <p class="text-muted">
+            Total size: @(totalSize / (1024 * 1024)) MB /
+            @(MaxTotalUploadSize / (1024 * 1024)) MB
+    </p>
 
 }
 </div>
@@ -80,20 +86,22 @@ else if (errorMessage != null)
     FileUploadResult? result;
     string? errorMessage;
     bool isDragging = false;
-    const long MaxFileSize = 2L * 1024 * 1024 * 1024; 
+    const long MaxFileSize = 2L * 1024 * 1024 * 1024; // 2 GB
+    const long MaxTotalUploadSize = 5L * 1024 * 1024 * 1024; // 5 GB
+    long totalSize;
+
 
     List<UploadProgressItem> progressItems = new();
 
 
     async Task OnFilesSelected(InputFileChangeEventArgs e)
     {
-        Console.WriteLine("OnFilesSelected fired");
-
         errorMessage = null;
         result = null;
         progressItems.Clear();
 
         var files = e.GetMultipleFiles();
+        totalSize = 0L;
 
         foreach (var file in files)
         {
@@ -102,13 +110,22 @@ else if (errorMessage != null)
                 errorMessage = $"File '{file.Name}' exceeds the 2 GB limit.";
                 return;
             }
+            totalSize += file.Size;
+        }
+        if (totalSize > MaxTotalUploadSize)
+        {
+            errorMessage = $"Total upload size exceeds the 5 GB limit.";
+            return;
+        }  
+
+        foreach (var file in files)
+        {
             progressItems.Add(new UploadProgressItem
             {
                 FileName = file.Name,
                 TotalBytes = file.Size
             });
-        }   
-
+        }
         try
         {
             result = await Transfer.UploadSequentialAsync(
