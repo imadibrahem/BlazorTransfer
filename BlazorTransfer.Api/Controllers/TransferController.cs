@@ -17,34 +17,25 @@ namespace BlazorTransfer.Api.Controllers
         } 
 
         [HttpPost("upload")]
-        public async Task<ActionResult<FileUploadResult>> Upload()
+        public async Task<ActionResult<FileUploadResult>> Upload(
+            [FromQuery] string? transferId)
         {
+            var files = Request.Form.Files;
+            if (files.Count == 0)
+                return BadRequest("No files");
 
-        foreach (var file in Request.Form.Files)
-        {
-            if (file.Length > 2L * 1024 * 1024 * 1024)
+            var result = await _storage.SaveAsync(files, transferId);
+
+            var downloadUrl =
+                $"{Request.Scheme}://{Request.Host}/api/transfer/download/{result.TransferId}";
+
+            return Ok(new FileUploadResult
             {
-               return BadRequest($"File '{file.FileName}' exceeds 2 GB limit.");
-            }
+                TransferId = result.TransferId,
+                DownloadUrl = downloadUrl,
+                Files = result.Files
+            });
         }
-
-        var files = Request.Form.Files;
-        if (files == null || files.Count == 0)
-            return BadRequest("No files");
-
-        var result = await _storage.SaveAsync(files);
-
-        var downloadUrl = $"{Request.Scheme}://{Request.Host}/api/transfer/download/{result.TransferId}";
-
-        var response = new FileUploadResult
-        {
-            TransferId = result.TransferId,
-            DownloadUrl = downloadUrl,
-            Files = result.Files
-        };
-
-        return Ok(response);
-      }
 
         [HttpGet("download/{id}")]
         public IActionResult Download(string id)

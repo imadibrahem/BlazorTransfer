@@ -111,14 +111,13 @@ else if (errorMessage != null)
 
         try
         {
-            result = await Transfer.UploadAsync(
+            result = await Transfer.UploadSequentialAsync(
                 files,
                 (fileName, uploaded, total) =>
-                {
+                 {
                     var item = progressItems.First(x => x.FileName == fileName);
                     item.UploadedBytes = uploaded;
                     InvokeAsync(StateHasChanged);
-
                 });
         }
         catch (Exception ex)
