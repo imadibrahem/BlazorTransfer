@@ -110,5 +110,25 @@ namespace BlazorTransfer.Api.Services
             return (zipStream, $"transfer-{id}.zip", "application/zip");
         }
 
+        public FileUploadResult? GetTransferInfo(string id)
+        {
+            var dir = Path.Combine(_basePath, id);
+            if (!Directory.Exists(dir))
+                return null;
+
+            var files = Directory.GetFiles(dir)
+                .Select(f => new FileMetadata
+                {
+                    FileName = Path.GetFileName(f),
+                    Size = new FileInfo(f).Length,
+                    ContentType = "application/octet-stream"
+                })
+                .ToList();
+            return new FileUploadResult
+            {
+                TransferId = id,
+                Files = files
+            };
+        }
     }
 }

@@ -7,6 +7,8 @@
 
 @inject TransferService Transfer
 @inject IJSRuntime JS
+@inject NavigationManager Nav
+
 
 <div class="upload-box">
     <h1 class="mb-4">Upload Files</h1>
@@ -68,7 +70,7 @@ else if (errorMessage != null)
     
     <div class="input-group mt-2">
         <input class="form-control"
-            value="@result.DownloadUrl"
+            value="@PageDownloadUrl"
             readonly />
         <button class="btn btn-primary" @onclick="CopyLink">
             Copy
@@ -85,6 +87,10 @@ else if (errorMessage != null)
 @code {
     FileUploadResult? result;
     string? errorMessage;
+    string PageDownloadUrl =>
+        result == null
+            ? string.Empty
+            : $"{Nav.BaseUri}download/{result.TransferId}";
     bool isDragging = false;
     const long MaxFileSize = 2L * 1024 * 1024 * 1024; // 2 GB
     const long MaxTotalUploadSize = 5L * 1024 * 1024 * 1024; // 5 GB
@@ -147,7 +153,7 @@ else if (errorMessage != null)
 
         async Task CopyLink()
     {
-        await ClipboardCopy(result!.DownloadUrl);
+        await ClipboardCopy(PageDownloadUrl);
     }
 
 

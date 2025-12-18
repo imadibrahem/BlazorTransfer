@@ -55,6 +55,17 @@ namespace BlazorTransfer.Api.Controllers
             if (zip == null) return NotFound();
             return File(zip.Value.Stream, zip.Value.ContentType, zip.Value.FileName);
         }
+
+        [HttpGet("info/{id}")]
+        public ActionResult<FileUploadResult> GetInfo(string id)
+        {
+            var info = _storage.GetTransferInfo(id);
+            if (info == null)
+                return NotFound();
+
+            return Ok(info);
+        }
+
     }
 }
 

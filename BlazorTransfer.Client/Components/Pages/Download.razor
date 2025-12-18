@@ -1,10 +1,68 @@
 @page "/download/{Id}"
+@using BlazorTransfer.Shared
+@rendermode InteractiveServer
+
+@inject HttpClient Http
 @inject NavigationManager Nav
 
+<h1 class="mb-4">Download files</h1>
+
+@if (error != null)
+{
+    <div class="alert alert-danger">@error</div>
+}
+else if (info == null)
+{
+    <p>Loading transfer info…</p>
+}
+else
+{
+    <div class="card p-4">
+        <p><strong>Transfer ID:</strong> @info.TransferId</p>
+        <p><strong>Total size:</strong> @(TotalSizeMb) MB</p>
+
+        <ul class="list-group mb-3">
+            @foreach (var file in info.Files)
+            {
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>@file.FileName</span>
+                    <span>@(file.Size / (1024 * 1024)) MB</span>
+                </li>
+            }
+        </ul>
+
+        <a class="btn btn-primary"
+           href="@DownloadUrl">
+            Download ZIP
+        </a>
+    </div>
+}
+
 @code {
-    [Parameter] public string Id { get; set; } = default!;
-    protected override void OnInitialized()
+    [Parameter] public string Id { get; set; } = null!;
+
+    FileUploadResult? info;
+    string? error;
+
+    long TotalSizeMb =>
+        info!.Files.Sum(f => f.Size) / (1024 * 1024);
+
+    string ApiBaseUrl =>
+    Nav.BaseUri.Replace("6501", "6500");
+
+    string DownloadUrl =>
+        $"{ApiBaseUrl}api/transfer/download/{Id}";
+
+    protected override async Task OnInitializedAsync()
     {
-        Nav.NavigateTo($"api/transfer/download/{Id}", forceLoad: true);
+        try
+        {
+            info = await Http.GetFromJsonAsync<FileUploadResult>(
+                $"{ApiBaseUrl}api/transfer/info/{Id}");
+        }
+        catch
+        {
+            error = "Transfer not found or expired.";
+        }
     }
 }
